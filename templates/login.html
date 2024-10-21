@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Role - Hospital Queue Management</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .role-selection {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 18px;
+            margin: 20px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .role-selection:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Select Your Role</h1>
+    <form method="POST" action="/login">
+        <button type="submit" name="role" value="doctor" class="role-selection">I am a Doctor</button>
+        <button type="submit" name="role" value="patient" class="role-selection">I am a Patient</button>
+        <button type="submit" name="role" value="management" class="role-selection">I am Management</button>
+    </form>
+
+</body>
+</html>

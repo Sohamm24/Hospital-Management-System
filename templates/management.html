@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/management.css') }}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-strip"></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar with Logo and Navigation -->
+        <aside>
+            <div class="sidebar-content">
+                <img src="path_to_logo" alt="Nanavati Max Logo" class="logo">
+                <h2>Management Dashboard</h2>
+                <hr>
+                <ul>
+                    <li><a href="/add_doctor">Add Doctors</a></li>
+                    <li><a href="#">Add Peons</a></li>
+                    <li><a href="#">Appointments</a></li>
+                    <li><a href="#">Staff Availability</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main>
+            <!-- Bed Allocation -->
+            <div class="dashboard-section">
+                <h3>Bed Allocation</h3>
+                <div class="button-group">
+                    <button class="btn">General Ward</button>
+                </div>
+            </div>
+
+            <!-- Emergency Bed Allocation -->
+            <div class="dashboard-section">
+                <h3>Emergency Bed Allocation</h3>
+                <div class="button-group">
+                    <button class="btn">ICU Ward</button>
+                    <button class="btn">Operation Theatre</button>
+                </div>
+            </div>
+
+            <!-- Queue Status -->
+            <div class="dashboard-section">
+                <h3>Queue Status</h3>
+                <div class="button-group">
+                    <button class="btn">General Ward</button>
+                    <button class="btn">ICU Ward</button>
+                    <button class="btn">Operation Theatre</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
