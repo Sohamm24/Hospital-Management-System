@@ -30,8 +30,17 @@
                 </ul>
             </div>
         </aside>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
-       
         <div class="dashboard-section">
             <h3>Add Doctor Details</h3>
             <form action="/add_doctor" method="POST" class="doctor-form">

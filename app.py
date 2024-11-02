@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for,flash
+from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 import secrets
 import string
 
 app = Flask(__name__)
 app.secret_key = 'HMS'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hospital.db'
+
+db = SQLAlchemy(app)
+
 
 users = {
     'doctor': {'username': 'doc1', 'password': 'pass123'},
@@ -12,21 +17,30 @@ users = {
     'management': {'username': 'man1', 'password': 'pass123'}
 }
 
-def create_doctors_table():
-    conn = sqlite3.connect('doctors.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS doctors (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            specialization TEXT NOT NULL,
-            email TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            experience INTEGER NOT NULL
-        )
-    ''')
-    conn.commit()
-    conn.close()
+class Doctor(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    specialization = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    phone = db.Column(db.String(15), nullable=False)
+    experience = db.Column(db.Integer, nullable=False)
+
+class Patient(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    sex = db.Column(db.String(10), nullable=False)
+    problems = db.Column(db.String(100), nullable=False)
+    reason_for_admission = db.Column(db.String(200), nullable=False)
+    consulting_doctor = db.Column(db.String(100), nullable=False)
+    emergency_contact = db.Column(db.String(100), nullable=True)
+    relationship_with_patient = db.Column(db.String(50), nullable=True)
+    additional_notes = db.Column(db.String(200), nullable=True)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'), nullable=False)
+
+
+with app.app_context():
+ db.create_all()
 
 @app.route('/')
 def home():
@@ -82,9 +96,6 @@ def management_login():
 def doctor_dashboard():
     return "Welcome to Doctor's Dashboard"
 
-@app.route('/patient_dashboard')
-def patient_dashboard():
-    return "Welcome to Patient's Dashboard"
 
 @app.route('/management_dashboard')
 def management_dashboard():
@@ -92,40 +103,98 @@ def management_dashboard():
 
 @app.route('/add_doctor', methods=['GET', 'POST'])
 def add_doctor():
+        if request.method == 'POST':
+            # Extract form data
+            doctor_name = request.form.get('doctorName')
+            specialization = request.form.get('specialization')
+            email = request.form.get('email')
+            phone = request.form.get('phone')
+            experience = request.form.get('experience')
+
+            # Check for existing doctor with the same email or specialization
+            existing_doctor = Doctor.query.filter(
+                (Doctor.email == email) | (Doctor.specialization == specialization)
+            ).first()
+            if existing_doctor:
+                flash("A doctor with this email or specialization already exists.", "danger")
+                return redirect(url_for('add_doctor'))
+
+            # Create a new doctor record
+            new_doctor = Doctor(
+                name=doctor_name,
+                specialization=specialization,
+                email=email,
+                phone=phone,
+                experience=experience
+            )
+
+            # Add to the database
+            db.session.add(new_doctor)
+            db.session.commit()
+            flash("Doctor added successfully!", "success")
+            return redirect(url_for('management_dashboard'))
+        
+        return render_template('addDoctor.html')
+
+@app.route('/patient_detail',methods=['GET','POST'])
+def patient_detail():
+ return render_template('general_ward.html')
+
+@app.route('/add_patient', methods=['GET', 'POST'])
+def add_patient():
     if request.method == 'POST':
-        name = request.form['doctorName']
-        specialization = request.form['specialization']
-        email = request.form['email']
-        phone = request.form['phone']
-        experience = request.form['experience']
+        patient_name = request.form.get('patient_name')
+        age = request.form.get('age')
+        sex = request.form.get('sex')
+        problems = request.form.get('problems')
+        reason_for_admission = request.form.get('reason')
+        consulting_doctor = request.form.get('consulting_doctor')
+        emergency_contact = request.form.get('emergency_contact')
+        relationship_with_patient = request.form.get('relationship_with_patient')
+        additional_notes = request.form.get('additional_notes')
 
-    
-        username = name.lower().replace(" ", "") + secrets.token_hex(3)
+        print(f"Patient Name: {patient_name}, Age: {age}, Sex: {sex}, Problems: {problems}, Reason: {reason_for_admission}")
 
-        characters = string.ascii_letters + string.digits + string.punctuation
-        password = ''.join(secrets.choice(characters) for i in range(8))
+        # Validation checks
+        if not patient_name or not age or not sex or not consulting_doctor:
+            flash("Patient name, age, sex, and consulting doctor are required.", "danger")
+            return redirect(url_for('add_patient'))
 
+        # Find the consulting doctor
+        doctor = Doctor.query.filter_by(name=consulting_doctor).first()
+        if not doctor:
+            flash("Consulting doctor not found. Please check the name and try again.", "danger")
+            return redirect(url_for('add_patient'))
+
+        # Create a new Patient record
+        new_patient = Patient(
+            name=patient_name,
+            age=int(age),
+            sex=sex,
+            problems=problems,
+            reason_for_admission=reason_for_admission,
+            consulting_doctor=consulting_doctor,
+            emergency_contact=emergency_contact,
+            relationship_with_patient=relationship_with_patient,
+            additional_notes=additional_notes,
+            doctor_id=doctor.id
+        )
+
+        # Attempt to add to the database
         try:
-            conn = sqlite3.connect('doctors.db')
-            cursor = conn.cursor()
-            cursor.execute('''
-                INSERT INTO doctors (name, specialization, email, phone, experience, username, password)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (name, specialization, email, phone, experience, username, password))
-            conn.commit()
-            flash(f"Doctor added successfully! Username: {username}, Password: {password}", "success")
+            db.session.add(new_patient)
+            db.session.commit()
+            flash("Patient added successfully!", "success")
         except Exception as e:
-            flash(f"Error occurred: {str(e)}", "danger")
-            print(f"Database Error: {str(e)}") 
-        finally:
-            conn.close()
+            db.session.rollback()  # Rollback in case of error
+            flash(f"Error adding patient: {str(e)}", "danger")
+        
+        return redirect(url_for('management_dashboard'))
 
-        return redirect(url_for('add_doctor'))
-    
-    return render_template('addDoctor.html')
+    # Render the form for adding a patient
+    return render_template('general_ward.html')  # This should be your form template
 
 
 if __name__ == '__main__':
-      create_doctors_table()
       app.run(debug=True)
 

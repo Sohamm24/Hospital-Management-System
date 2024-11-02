@@ -104,6 +104,12 @@ main {
     background-color: #d4eaff;
 }
 
+.view-btn{
+    background-color:rgb(4, 230, 4);
+    padding:10px;
+    border:none;
+    border-radius:5px;
+}
 /* Responsive for smaller screens */
 @media (max-width: 768px) {
     .container {
