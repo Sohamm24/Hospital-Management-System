@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for,flash
 import sqlite3
+import secrets
+import string
 
 app = Flask(__name__)
 app.secret_key = 'HMS'
@@ -91,25 +93,30 @@ def management_dashboard():
 @app.route('/add_doctor', methods=['GET', 'POST'])
 def add_doctor():
     if request.method == 'POST':
-     
         name = request.form['doctorName']
         specialization = request.form['specialization']
         email = request.form['email']
         phone = request.form['phone']
         experience = request.form['experience']
 
-      
+    
+        username = name.lower().replace(" ", "") + secrets.token_hex(3)
+
+        characters = string.ascii_letters + string.digits + string.punctuation
+        password = ''.join(secrets.choice(characters) for i in range(8))
+
         try:
-            conn = sqlite3.connect('doctors.db') 
+            conn = sqlite3.connect('doctors.db')
             cursor = conn.cursor()
             cursor.execute('''
-                INSERT INTO doctors (name, specialization, email, phone, experience)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (name, specialization, email, phone, experience))
+                INSERT INTO doctors (name, specialization, email, phone, experience, username, password)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (name, specialization, email, phone, experience, username, password))
             conn.commit()
-            flash("Doctor added successfully!", "success")
+            flash(f"Doctor added successfully! Username: {username}, Password: {password}", "success")
         except Exception as e:
             flash(f"Error occurred: {str(e)}", "danger")
+            print(f"Database Error: {str(e)}") 
         finally:
             conn.close()
 
@@ -117,31 +124,8 @@ def add_doctor():
     
     return render_template('addDoctor.html')
 
-@app.route('/index', methods=['POST'])  
-def index():
-    try:
-        name = request.form['doctorName']
-        specialization = request.form['specialization']
-        email = request.form['email']
-        phone = request.form['phone']
-        experience = request.form['experience']
-
-       
-        conn = sqlite3.connect('doctors.db') 
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO doctors (name, specialization, email, phone, experience)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (name, specialization, email, phone, experience))
-        conn.commit()
-        conn.close()
-
-        flash("Doctor added successfully!", "success")
-    except Exception as e:
-        flash(f"Error occurred: {str(e)}", "danger")
-    
-    return redirect(url_for('add_doctor'))
 
 if __name__ == '__main__':
       create_doctors_table()
       app.run(debug=True)
+
