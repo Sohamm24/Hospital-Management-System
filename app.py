@@ -194,6 +194,9 @@ def add_patient():
     # Render the form for adding a patient
     return render_template('general_ward.html')  # This should be your form template
 
+@app.route('/view_patients', methods=['GET', 'POST'])
+def view_patients():
+  return render_template('view_patient.html')
 
 if __name__ == '__main__':
       app.run(debug=True)

@@ -7,21 +7,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='/addDoctor.css') }}">
 </head>
 <body>
-
-   
     <header>
         <div class="header-strip">
          
         </div>
     </header>
-
-    
+ 
     <div class="container">
-        
-      
         <aside>
             <div class="sidebar-content">
-                <img src="brandLogo_nanavati.svg" alt="Nanavati Max Logo" class="logo">
+                <img src="{{ url_for('static', filename='brandLogo_nanavati.svg') }}" alt="Nanavati Max Logo" class="logo">
                 <h2>Add Doctors</h2>
                 <hr>
                 <ul>
@@ -31,15 +26,6 @@
             </div>
         </aside>
         
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
 
         <div class="dashboard-section">
             <h3>Add Doctor Details</h3>
