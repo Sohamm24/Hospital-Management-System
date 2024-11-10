@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,flash
+from flask import Flask, render_template, request, redirect, url_for,flash,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
@@ -37,6 +37,17 @@ class Patient(db.Model):
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'), nullable=False)
     ward_id=db.Column(db.Integer,db.ForeignKey('ward.ward_id'),nullable=False)
 
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'age': self.age,
+            'sex': self.sex,
+            'problems': self.problems,
+            'consulting_doctor': self.consulting_doctor,
+            'ward_id': self.ward_id
+        }
+
 class Ward(db.Model): #base class (db.model)
     ward_id = db.Column(db.Integer, primary_key=True)
     ward_name = db.Column(db.String(10), nullable=False)
@@ -51,8 +62,43 @@ class Bed(db.Model):
     bed_number = db.Column(db.String(10))
     status = db.Column(db.String(20), default='available')
 
-with app.app_context():
- db.create_all()
+class PatientRecord(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    age = db.Column(db.Integer)
+    sex = db.Column(db.String)
+    problems = db.Column(db.Text)
+    reason_for_admission = db.Column(db.Text)
+    consulting_doctor = db.Column(db.String)
+    emergency_contact = db.Column(db.String)
+    relationship_with_patient = db.Column(db.String)
+    additional_notes = db.Column(db.Text)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'))
+    symptoms = db.Column(db.Text)
+    prescribed_medicines = db.Column(db.Text)
+    follow_up_date = db.Column(db.Date)
+    ward_id = db.Column(db.Integer, db.ForeignKey('ward.ward_id'))
+
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'sex': self.sex,
+            'problems': self.problems,
+            'reason_for_admission': self.reason_for_admission,
+            'consulting_doctor': self.consulting_doctor,
+            'emergency_contact': self.emergency_contact,
+            'relationship_with_patient': self.relationship_with_patient,
+            'additional_notes': self.additional_notes,
+            'doctor_id': self.doctor_id,
+            'symptoms': self.symptoms,
+            'prescribed_medicines': self.prescribed_medicines,
+            'follow_up_date': self.follow_up_date,
+            'ward_id': self.ward_id
+        }
+
 
 @app.route('/')
 def home():
@@ -123,7 +169,6 @@ def add_doctor():
             phone = request.form.get('phone')
             experience = request.form.get('experience')
 
-            
             existing_doctor = Doctor.query.filter(
                 (Doctor.email == email) | (Doctor.specialization == specialization)
             ).first()
@@ -140,12 +185,17 @@ def add_doctor():
                 experience=experience
             )
 
-            # Add to the database
-            db.session.add(new_doctor)
-            db.session.commit()
-            flash("Doctor added successfully!", "success")
-            return redirect(url_for('management_dashboard'))
-        
+            try:
+               db.session.add(new_doctor)
+               db.session.commit()
+               flash("Doctor added successfully!", "success")
+               return redirect(url_for('management_dashboard'))
+            except Exception as e:
+               db.session.rollback() 
+               print(f"An error occurred: {str(e)}", "danger")
+               return redirect(url_for('add_doctor'))
+
+
         return render_template('addDoctor.html')
 
 
@@ -220,7 +270,23 @@ def add_patient():
 
 @app.route('/view_patients', methods=['GET', 'POST'])
 def view_patients():
-  return render_template('view_patient.html')
+  patients = Patient.query.all()
+  return render_template('view_patient.html',patients=patients)
+
+@app.route('/get_patients', methods=['GET'])
+def get_patients_data():
+    patients = Patient.query.all()
+    return jsonify([patient.to_dict() for patient in patients]) 
+
+@app.route('/view_patients_record', methods=['GET', 'POST'])
+def view_patients_record():
+    patients_record =  PatientRecord.query.all()
+    return render_template('view_past_patient.html',patients_record=patients_record)
+
+@app.route('/get_patients_record', methods=['GET'])
+def get_patients_data_record():
+    patients_record = PatientRecord.query.all()
+    return jsonify([patient.to_dict() for patient in patients_record])
 
 if __name__ == '__main__':
       app.run(debug=True)

@@ -142,15 +142,12 @@ td {
                 <img src="{{ url_for('static', filename='brandLogo_nanavati.svg') }}" alt="Nanavati Max Logo" class="logo">
                 <h2>Patients</h2>
                 <hr>
-                <ul>
-                    <li><a href="/view_patients_record">View Past Patients</a></li>
-                  
-                </ul>
+                
             </div>
         </aside>
 
         <div class="dashboard-section">
-            <h1>Patient Records</h1>
+            <h1>Past Patient Records</h1>
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="Search by name">
             </div>
@@ -211,13 +208,13 @@ td {
        
         setInterval(function() {
             $.ajax({
-                url: '/get_patients', 
+                url: '/get_patients_record', 
                 method: 'GET',
                 success: function(data) {
                     updatePatientTable(data); 
                 }
             });
-        }, 2000); 
+        }, 2000);
     </script>
 </body>
 </html>
