@@ -22,7 +22,6 @@
                 <hr>
                 <ul>
                     <li><a href="/add_doctor">Add Doctors</a></li>
-                    <li><a href="#">Add Peons</a></li>
                     <li><a href="#">Appointments</a></li>
                     <li><a href="#">Staff Availability</a></li>
                 </ul>
@@ -36,32 +35,33 @@
                 <h3>Bed Allocation</h3>
                 <div class="button-group">
                     <form method="POST" action="/patient_detail">
-                    <button class="btn">General Ward</button>
+                    <button class="btn">Bed Allocation for new patient </button>
                    </form>
                 </div>
             </div>
 
             <!-- Emergency Bed Allocation -->
             <div class="dashboard-section">
-                <h3>Emergency Bed Allocation</h3>
+                <h3>Shift patient in another ward/ICU/Operation Theatre</h3>
                 <div class="button-group">
-                    <button class="btn">ICU Ward</button>
-                    <button class="btn">Operation Theatre</button>
+                    <button class="btn">Transfer</button>
                 </div>
             </div>
 
             <!-- Queue Status -->
             <div class="dashboard-section">
-                <h3>Queue Status</h3>
+                <h3>Queue Status for Upcoming Treatments</h3>
                 <div class="button-group">
-                    <button class="btn">General Ward</button>
-                    <button class="btn">ICU Ward</button>
-                    <button class="btn">Operation Theatre</button>
+                    <button class="btn">View</button>
                 </div>
             </div>
-            <form method="POST" action="/view_patients">
-            <button class="view-btn">View Patients</button>
-            </form>
+
+            <div class="dashboard-section">
+               <h3>View/Discharge Current and Past Patient Record of Nanavati Hosptial</h3>
+               <form method="POST" action="/view_patients">
+               <button class="view-btn">View Patients</button>
+               </form>
+            </div>
         </main>
         
     </div>

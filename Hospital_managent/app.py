@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for,flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+import sqlite3
+import secrets
+import string
 
 app = Flask(__name__)
 app.secret_key = 'HMS'
@@ -35,21 +37,7 @@ class Patient(db.Model):
     relationship_with_patient = db.Column(db.String(50), nullable=True)
     additional_notes = db.Column(db.String(200), nullable=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'), nullable=False)
-    ward_id=db.Column(db.Integer,db.ForeignKey('ward.ward_id'),nullable=False)
 
-class Ward(db.Model): #base class (db.model)
-    ward_id = db.Column(db.Integer, primary_key=True)
-    ward_name = db.Column(db.String(10), nullable=False)
-    ward_type = db.Column(db.String(50))
-    total_beds = db.Column(db.Integer)
-    
-    beds = db.relationship('Bed', backref='ward', lazy=True)
-
-class Bed(db.Model):
-    bed_id = db.Column(db.Integer, primary_key=True)
-    ward_id = db.Column(db.Integer, db.ForeignKey('ward.ward_id'), nullable=False)
-    bed_number = db.Column(db.String(10))
-    status = db.Column(db.String(20), default='available')
 
 with app.app_context():
  db.create_all()
@@ -148,18 +136,9 @@ def add_doctor():
         
         return render_template('addDoctor.html')
 
-
 @app.route('/patient_detail',methods=['GET','POST'])
 def patient_detail():
-    ward_bed_counts = db.session.query(
-        Bed.ward_id, func.count(Bed.bed_id).label('available_beds')
-    ).filter(Bed.status == 'available').group_by(Bed.ward_id).all()
-    
-    ward_bed_counts_dict = {ward_id: count for ward_id, count in ward_bed_counts}
-    print(ward_bed_counts_dict)
-
-    return render_template('general_ward.html',ward_bed_counts_dict=ward_bed_counts_dict)
-
+ return render_template('general_ward.html')
 
 @app.route('/add_patient', methods=['GET', 'POST'])
 def add_patient():
@@ -173,10 +152,8 @@ def add_patient():
         emergency_contact = request.form.get('emergency_contact')
         relationship_with_patient = request.form.get('relationship_with_patient')
         additional_notes = request.form.get('additional_notes')
-        ward_id=request.form.get('ward_id')
 
-
-        print(f"Patient Name: {patient_name}, Age: {age}, Sex: {sex}, Problems: {problems}, Reason: {reason_for_admission}, Ward Selected:{ward_id}")
+        print(f"Patient Name: {patient_name}, Age: {age}, Sex: {sex}, Problems: {problems}, Reason: {reason_for_admission}")
 
        
         if not patient_name or not age or not sex or not consulting_doctor:
@@ -200,8 +177,7 @@ def add_patient():
             emergency_contact=emergency_contact,
             relationship_with_patient=relationship_with_patient,
             additional_notes=additional_notes,
-            doctor_id=doctor.id,
-            ward_id=ward_id
+            doctor_id=doctor.id
         )
 
         

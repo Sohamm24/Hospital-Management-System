@@ -3,132 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Patient Queue Management System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Nanavati Max Hospital Management System</title>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
+        /* General Reset */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f0f8ff;
+            box-sizing: border-box;
         }
-        header {
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header Styling */
+        .header {
+            background-color: #003c8f;
+            padding: 10px 0;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            background-color: #3498db;
-            padding: 10px 20px;
-            color: white;
+            padding-left: 20px;
         }
-        header a {
-            color: white;
+
+        .header img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Navigation Bar */
+        .nav {
+            background-color: #46c2b3;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: #fff;
             text-decoration: none;
-            margin-left: 20px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 8px;
         }
-        .banner {
-            background-image: url('https://example.com/your-image.jpg'); /* Replace with a high-quality healthcare image */
-            background-size: cover;
-            background-position: center;
-            height: 300px;
-            color: black;
+
+        .nav a:hover {
+            background-color: #3ba89b;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hospital-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            height: 450px;
+        }
+
+        .content-container {
+            flex: 1;
+            padding-left: 20px;
+            text-align: left;
+        }
+
+        .content-container h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .buttons {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .buttons a {
+            display: block;
+            background-color: #003c8f;
+            color: #fff;
+            padding: 10px;
             text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            width: 50%;
         }
-        .banner h1 {
-            font-size: 36px;
+
+        .buttons a:hover {
+            background-color: #002c6f;
         }
-        .banner p {
-            font-size: 20px;
-        }
-        .about {
-            padding: 20px;
+
+        /* Footer Section */
+        .footer {
+            background-color: #e6e6e6;
+            padding: 15px;
             text-align: center;
-        }
-        .user-categories {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            gap: 20px;
-        }
-        .user-card {
-            border: 1px solid #3498db;
-            border-radius: 5px;
-            padding: 20px;
-            width: 200px;
-            text-align: center;
-        }
-        .features {
-            background-color: #e7f3fe;
-            padding: 20px;
-            text-align: center;
-        }
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 10px 20px;
-            position: relative;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
         }
     </style>
 </head>
 <body>
+    <!-- Header with Logo and Title -->
+    <header class="header">
+        <img src="https://www.maxcancercongress.com/assets/img/logo.png" alt="Hospital Logo">
+        <h1>NANAVATI MAX</h1>
+    </header>
 
-<header>
-    <div class="logo">Hospital Logo</div>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/about">About Us</a>
-        <a href="/login">Login</a>
-        <a href="/contact">Contact</a>
+    <!-- Navigation Bar -->
+    <nav class="nav">
+        <a href="#">Book Appointment</a>
+        <a href="#">Contact</a>
+        <a href="#">Reports</a>
+        <a href="#">About Us</a>
+        <a href="#">Emergency</a>
     </nav>
-</header>
 
-<div class="banner">
-    <h1>Welcome to Nanavati Max Hospital Management System</h1>
-    <p>Efficiently Manage Patient Flow and Care</p>
-</div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Left Side - Image -->
+        <div class="image-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmUpXhxcXxW3hlbrIXbeXuIQ6ZKhAcjlat_w&s" alt="Nanavati Hospital" class="hospital-image">
+        </div>
 
-<div class="about">
-    <h2>About the System</h2>
-    <p>Our Hospital Patient Queue Management System helps manage patient queues, doctor assignments, and real-time updates to ensure smooth hospital operations.</p>
-</div>
-
-<div class="user-categories">
-    <div class="user-card">
-        <h3>Doctors</h3>
-        <p>Manage patient details and access real-time updates.</p>
-        <a href="/doctor_login">Learn More</a>
+        <!-- Right Side - Text and Buttons -->
+        <div class="content-container">
+            <h2>Welcome to Nanavati Max Hospital Management System</h2>
+            <div class="buttons">
+                <a href="/login">Management Dashboard</a>
+                <a href="#">Doctor Dashboard</a>
+                <a href="#">View Waiting (For Patients)</a>
+            </div>
+        </div>
     </div>
-    <div class="user-card">
-        <h3>Peons</h3>
-        <p>Add or remove patients from the queue effortlessly.</p>
-        <a href="/peon_login">Learn More</a>
-    </div>
-    <div class="user-card">
-        <h3>Management</h3>
-        <p>Monitor and track patients and doctors in real time.</p>
-        <a href="/management_login">Learn More</a>
-    </div>
-</div>
 
-<div class="features">
-    <h2>Key Features</h2>
-    <ul>
-        <li>Queue Management: Automatically prioritize based on urgency (Normal, Urgent, Emergency).</li>
-        <li>Doctor Dashboards: Real-time access to patient details.</li>
-        <li>Tracking: Management can view patient status and doctor availability in real-time.</li>
-        <li>Real-time Notifications: For critical patient management.</li>
-    </ul>
-</div>
-
-<footer>
-    <p>Quick Links: Home | About Us | Contact | Privacy Policy</p>
-    <p>Contact: info@hospital.com | Phone: (123) 456-7890</p>
-    <p>&copy; 2024 Hospital Name. All Rights Reserved.</p>
-</footer>
-
+    <!-- Footer Section -->
+    <footer class="footer">
+        Generic Hospital Info
+    </footer>
 </body>
 </html>

@@ -16,7 +16,7 @@ header .header-strip {
 
 .container {
     display: flex;
-    height: 170vh;
+    height: 190vh;
 }
 
 aside {
@@ -88,6 +88,14 @@ aside {
     border-radius: 4px;
 }
 
+.form-group textarea{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 .form-group input:focus {
     outline: none;
     border-color: #007bff;
@@ -120,64 +128,58 @@ aside {
     color: #333;
     margin-right: 10px;
 }
-.proceed-container {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-    width:400px;
-}
 
-/* Heading styling */
-.proceed-container h4 {
-    font-size: 18px;
-    color: #333;
+.container1{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
 }
-
-.btn-next:hover {
-    background-color: #0069d9;
-}
-
-.btn-next:active {
-    background-color: #0056b3;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    max-width: 250px;
-    height: 6px;
-    background-color: #007bff;
+.parent-box {
+    background-color: #f0f0f0;
+    padding: 10px;
     border-radius: 5px;
-    outline: none;
-    cursor: pointer;
+    margin-top: 20px;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    background-color: #fff;
-    border: 2px solid #007bff;
-    border-radius: 50%;
-}
-
-input[type="range"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    background-color: #fff;
-    border: 2px solid #007bff;
-    border-radius: 50%;
-}
-
-
-output {
-    margin-left: 10px;
-    font-size: 16px;
+.ward-card {
+    background-color: #ff6f61;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
     font-weight: bold;
-    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-/* Button styling */
+.selected-ward {
+    margin-top: 20px;
+    font-size: 1.2em;
+} 
+
+.ward-card:hover{
+    background-color: #eb5266;
+}
+
+input[type="radio"] {
+    display: none; 
+}
+
+input[type="radio"] + label {
+    cursor: pointer; 
+    display: block; 
+}
+
+input[type="radio"]:checked + label {
+    background-color: #eb5266; 
+    color: white;
+    border-radius: 5px;
+}
+
+
 button {
     display: block;
     width: 100%;

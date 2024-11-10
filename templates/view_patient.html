@@ -1,40 +1,216 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Patient Records</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/addDoctor.css') }}">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+header .header-strip {
+    height: 50px;
+    background-color: #003366; 
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+aside {
+    width: 250px;
+    background-color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 20px;
+}
+
+.sidebar-content {
+    text-align: center;
+}
+
+.sidebar-content .logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.sidebar-content h2 {
+    font-size: 20px;
+    color: #333;
+}
+
+.sidebar-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-content ul li {
+    margin: 15px 0;
+}
+
+.sidebar-content ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.dashboard-section {
+    flex:1;
+    background-color: #00bfa5;
+    padding: 20px;
+    border-radius: 10px;
+    margin : 30px;
+}
+
+.dashboard-section h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+th {
+    padding: 10px; /* Adjust padding as needed */
+}
+
+td {
+    padding: 10px; /* Adjust padding as needed */
+}
+.search-bar {
+    padding-left: 65%;
+
+}
+    </style>
 </head>
 <body>
-    <h1>Patient Records</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Sex</th>
-                <th>Problems</th>
-                <th>Consulting Doctor</th>
-                <th>Admission Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for patient in patients %}
-            <tr>
-                <td>{{ patient.name }}</td>
-                <td>{{ patient.age }}</td>
-                <td>{{ patient.sex }}</td>
-                <td>{{ patient.problems }}</td>
-                <td>{{ patient.consulting_doctor }}</td>
-                <td>{{ patient.admission_date }}</td>
-                <td>
-                    <form action="{{ url_for('discharge_patient') }}" method="post">
-                        <input type="hidden" name="patient_id" value="{{ patient.id }}">
-                        <button type="submit">Discharge</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <header>
+        <div class="header-strip">
+            </div>
+    </header>
+
+    <div class="container">
+        <aside>
+            <div class="sidebar-content">
+                <img src="{{ url_for('static', filename='brandLogo_nanavati.svg') }}" alt="Nanavati Max Logo" class="logo">
+                <h2>Patients</h2>
+                <hr>
+                <ul>
+                    <li><a href="#">View Past Patients</a></li>
+                  
+                </ul>
+            </div>
+        </aside>
+
+        <div class="dashboard-section">
+            <h1>Patient Records</h1>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search by name">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Problems</th>
+                        <th>Consulting Doctor</th>
+                        <th>Admission Date</th>
+                    </tr>
+                </thead>
+                <tbody id="patient-table">
+                    <tr>
+                        <td>Pratik Pujari</td>
+                        <td>19</td>
+                        <td>Male</td>
+                        <td>Fever</td>
+                        <td>Dr. Shah</td>
+                        <td>2023-11-03</td>
+                    </tr>
+                    <tr>
+                        <td>Sahil Mahadik</td>
+                        <td>21</td>
+                        <td>Male</td>
+                        <td>Cough</td>
+                        <td>Dr. Sharma</td>
+                        <td>2023-11-02</td>
+                    </tr>
+                    <tr>
+                        <td>Soham Narvankar</td>
+                        <td>20</td>
+                        <td>Male</td>
+                        <td>Cough</td>
+                        <td>Dr. Sharma</td>
+                        <td>2023-11-02</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const patientRows = document.querySelectorAll('#patient-table tr');
+
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            patientRows.forEach(row => {
+                const nameCell = row.cells[0];
+                const name = nameCell.textContent.toLowerCase();
+
+                if (name.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

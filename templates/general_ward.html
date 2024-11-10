@@ -21,7 +21,6 @@
                 <hr>
                 <ul>
                     <li><a href="#">Add Patient Details</a></li>
-                    <li><a href="#general">General Questions<li>
                     <li><a href="#proceed">Bed Availibility</a><li>
                   
                 </ul>
@@ -80,24 +79,85 @@
                 <label for="additional-notes">Additional Notes:</label>
                 <textarea id="additional-notes" name="additional_notes"></textarea>
             </div>
-            <h3>General Questions</h3>
-            <h6>After doctor checkup, please rate the severity of the case to prioritize bed allocation (1 - 10):</h6>
-            <div class="form-group" id="general">
-                 <label for="severity">Severity Level (1-10):</label>
-                 <input type="range" id="severity" name="severity" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
-                 <output>5</output>
-            </div>
-                <div class="proceed-container" id="proceed">
-                    <h4>Proceed for bed allocation</h4>
-                    <button class="btn-next">Proceed</button>
-                </div>
-                <h3>Bed status:</h3>
+
+            <h4>Select Bed</h4>
+
+    <div class="container1">
+
+        <div class="ward-card">
+            <input type="radio" id="wardA1" name="ward_id" value="A1">
+            <label for="wardA1">A1 General Ward<br><span>{{ward_bed_counts_dict[1]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardB1" name="ward_id" value="B1">
+            <label for="wardB1">B1 General Ward<br><span>{{ward_bed_counts_dict[4]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardC1" name="ward_id" value="C1">
+            <label for="wardC1">C1 ICU<br><span>{{ward_bed_counts_dict[7]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardD1" name="ward_id" value="D1">
+            <label for="wardD1">D1 Operation Theatre<br><span>{{ward_bed_counts_dict[10]}} Bed Available</span></label>
+        </div>
+        
+        <div class="ward-card">
+            <input type="radio" id="wardA2" name="ward_id" value="A2">
+            <label for="wardA2">A2 General Ward<br><span>{{ward_bed_counts_dict[2]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardB2" name="ward_id" value="B2">
+            <label for="wardB2">B2 General Ward<br><span>{{ward_bed_counts_dict[5]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardC2" name="ward_id" value="C2">
+            <label for="wardC2">C2 ICU<br><span>{{ward_bed_counts_dict[8]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardD2" name="ward_id" value="D2">
+            <label for="wardD2">D2 Operation Theatre<br><span>{{ward_bed_counts_dict[11]}} Bed Available</span></label>
+        </div>
+        
+        <div class="ward-card">
+            <input type="radio" id="wardA3" name="ward_id" value="A3">
+            <label for="wardA3">A3 General Ward<br><span>{{ward_bed_counts_dict[3]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardB3" name="ward_id" value="B3">
+            <label for="wardB3">B3 General Ward<br><span>{{ward_bed_counts_dict[6]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardC3" name="ward_id" value="C3">
+            <label for="wardC3">C3 ICU<br><span>{{ward_bed_counts_dict[9]}} Beds Available</span></label>
+        </div>
+        <div class="ward-card">
+            <input type="radio" id="wardD3" name="ward_id" value="D3">
+            <label for="wardD3">D3 Operation Theatre<br><span>{{ward_bed_counts_dict[12]}} Bed Available</span></label>
+        </div>
+    </div>
+             
+    <div class="selected-ward">
+        <h3>Selected Ward:</h3>
+        <div id="selectedWardDisplay"></div>
+    </div>
 
             <button type="submit" id="submit-button" class="submit-btn"><h3>Submit</h3></button>
         </form>
 
         </div>
     </div>
+
+  <script>
+    const radios = document.querySelectorAll('input[name="ward"]');
+    const selectedWardDisplay = document.getElementById('selectedWardDisplay');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            selectedWardDisplay.textContent = radio.nextElementSibling.innerText;
+        });
+    });
+
+  </script>
 
 </body>
 </html>
